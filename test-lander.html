@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Landing Page</title>
+<style>
+  :root {
+    --ink: #16181c;
+    --paper: #fafaf8;
+    --accent: #2f6f4f;
+    --muted: #6b7178;
+    --line: #e4e4e0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  h1 {
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  p.sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+  .cta {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px 40px;
+    border-radius: 6px;
+    transition: opacity 0.15s ease;
+  }
+  .cta:hover { opacity: 0.88; }
+  .cta:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .footnote {
+    margin-top: 28px;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+  .footnote code {
+    background: #f0f0ec;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="eyebrow">Test Lander</div>
+    <h1>This is a test landing page</h1>
+    <p class="sub">Built to verify click tracking, redirects, and the flow from ad to offer inside KAP Tracker.</p>
+    <a href="OFFER_URL_GOES_HERE" class="cta" id="ctaBtn">Continue &rarr;</a>
+    <div class="footnote">
+      Click ID passthrough: <code id="clickIdDisplay">reading...</code>
+    </div>
+  </div>
+
+  <script>
+    // Reads clickid (or any tracker param) from the URL and appends it to the CTA link,
+    // so clicking "Continue" carries the same click id forward to the offer.
+    const params = new URLSearchParams(window.location.search);
+    const clickid = params.get('clickid') || params.get('sub1') || '';
+
+    const cta = document.getElementById('ctaBtn');
+    const display = document.getElementById('clickIdDisplay');
+
+    if (clickid) {
+      const url = new URL(cta.href, window.location.href);
+      url.searchParams.set('clickid', clickid);
+      cta.href = url.toString();
+      display.textContent = clickid;
+    } else {
+      display.textContent = 'none in URL';
+    }
+  </script>
+</body>
+</html>
